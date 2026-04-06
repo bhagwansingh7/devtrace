@@ -1,27 +1,20 @@
-import express, { json } from 'express';
-const app = express();
-// import cors from 'cors';
-import dotenv from 'dotenv';
+const dotenv = require('dotenv');
 dotenv.config();
-import connectDB from './config/db.js';
-import authRoutes from "./routes/auth.routes.js";
-
-import userRoutes from "./routes/user.routes.js";
-
-
-
+const app=require ('./src/app');
+const connectDB = require('./src/config/db');
 
 const PORT = process.env.PORT || 5000;
-app.use(express.json());
-// app.use(cors());
-app.use("/api/auth",authRoutes);
-app.use("/api/user",userRoutes);
 
+// Connect to database
+connectDB();
 
+const server = app.listen(PORT, () => {
+  console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`);
+});
 
-
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-  
-  connectDB()
+// Handle unhandled promise rejections
+process.on('unhandledRejection', (err, promise) => {
+  console.error(`Error: ${err.message}`);
+  // Close server & exit process
+  server.close(() => process.exit(1));
 });
