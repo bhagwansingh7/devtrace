@@ -9,7 +9,7 @@ const userSchema = new mongoose.Schema({
     trim: true,
     lowercase: true,
   },
-  password: { type: String, required: true, select: false }, // Don't return password by default
+  password: { type: String, required: true, select: false }, 
   role: { type: String, enum: ["user", "admin"], default: "user" },
   createdAt: { type: Date, default: Date.now },
 });
